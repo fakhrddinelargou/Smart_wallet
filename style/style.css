@@ -1,8 +1,11 @@
-.incomes_salle{
+
+
+.icon_salle{
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 40px;
+    height: 10vh;
+    padding-left: 20px;
    color: var(--color-primary-dark);
    font-size: 22px;
    font-weight: 600;
@@ -19,4 +22,97 @@
 }
 .in_icon svg{
     width: 22px;
+}
+.section_table{
+    width: 100%;
+    height: 90vh;
+    padding: 10px;
+}
+
+/* Card */
+.card {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 18px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+  width: 90%;
+  margin: 20px auto;
+  font-family: "Inter", sans-serif;
+}
+
+/* Title */
+.title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 15px;
+}
+
+/* Table Base */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.table th {
+  text-align: left;
+  padding: 12px 0;
+  color: #9ca3af;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.table td {
+  padding: 14px 0;
+  border-top: 1px solid #f3f4f6;
+  color: #4b5563;
+}
+
+/* Hover */
+.table tbody tr:hover {
+  background: #f9fafb;
+}
+
+/* Dots */
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 8px;
+}
+
+.blue { background: #3b82f6; }
+.red { background: #ef4444; }
+.yellow { background: #f59e0b; }
+
+/* Amount Colors */
+.amount {
+  font-weight: 600;
+}
+.amount.positive { color: #059669; }
+.amount.negative { color: #dc2626; }
+
+/* Badges */
+.badge {
+  padding: 4px 10px;
+  font-size: 11px;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+.blue-b {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.red-b {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.yellow-b {
+  background: #fffbeb;
+  color: #d97706;
 }
