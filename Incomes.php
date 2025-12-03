@@ -1,3 +1,12 @@
+<?php
+
+if (function_exists("sqlsrv_connect")) {
+    echo "SQLSRV is working!";
+} else {
+    echo "SQLSRV NOT FOUND!";
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
