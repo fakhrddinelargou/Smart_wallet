@@ -38,6 +38,7 @@
   width: 90%;
   margin: 20px auto;
   font-family: "Inter", sans-serif;
+  position: relative;
 }
 
 /* Title */
@@ -50,6 +51,7 @@
 
 /* Table Base */
 .table {
+
   width: 100%;
   border-collapse: collapse;
   font-size: 14px;
@@ -115,4 +117,240 @@
 .yellow-b {
   background: #fffbeb;
   color: #d97706;
+}
+
+
+/* create */
+.Btn {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 35px;
+  height: 35px;
+  border-radius: calc(45px/2);
+  border: none;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition-duration: .3s;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.199);
+  background: linear-gradient(144deg,#c579fc,#7763fa 50%,#00ddeb);
+}
+
+/* plus sign */
+.sign {
+  width: 100%;
+  font-size: 2em;
+  color: white;
+  transition-duration: .3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+/* text */
+.text {
+  position: absolute;
+  right: 0%;
+  width: 0%;
+  opacity: 0;
+  color: white;
+  font-size: 1.2em;
+  font-weight: 500;
+  transition-duration: .3s;
+}
+/* hover effect on button width */
+.Btn:hover {
+  width: 100px;
+  transition-duration: .3s;
+}
+
+.Btn:hover .sign {
+  width: 30%;
+  transition-duration: .3s;
+  padding-left: 15px;
+}
+/* hover effect button's text */
+.Btn:hover .text {
+  opacity: 1;
+  width: 70%;
+  transition-duration: .3s;
+  padding-right: 15px;
+}
+/* button click effect*/
+.Btn:active {
+  transform: translate(2px ,2px);
+}
+
+.container_form{
+ width: 100%;
+ height: 100vh;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: 0;
+  left: 0;
+  background: #0000001f;
+
+}
+
+
+/* Form card */
+.form-card {
+  margin-top: 25px;
+  width: 50%;
+}
+
+/* Form base */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.close-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: #f3f4f6;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  font-size: 20px;
+  font-weight: 600;
+  color: #6b7280;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+/* Hover */
+.close-btn:hover {
+  background: rgba(59,130,246,0.12);
+  color: #1e40af;
+  transform: scale(1.05);
+}
+
+
+/* Label + inputs */
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  color: #6b7280;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  font-size: 14px;
+  color: #374151;
+  outline: none;
+  transition: 0.25s;
+}
+
+/* Focus effect */
+.form-group input:focus {
+  border-color: #3b82f6;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
+}
+
+/* Submit button */
+.submit-btn {
+  margin-top: 10px;
+  padding: 12px;
+  background: linear-gradient(135deg, #3b82f6, #1e40af);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+/* Hover */
+.submit-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+
+.alert-error {
+  position: absolute;
+  top: 30px;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #ffe6e6;
+  border-left: 4px solid #ff3b3b;
+  padding: 12px 15px;
+  border-radius: 6px;
+  color: #b30000;
+  width: fit-content;
+  box-shadow: 0 2px 6px rgba(255, 0, 0, 0.15);
+  animation: fadeIn 0.3s ease;
+}
+
+.alert-error .icon {
+  font-size: 20px;
+  padding-bottom: 8px;
+
+}
+
+.alert-error p {
+  font-size: 15px;
+  font-weight: 600;
+  font-family: var(--font-main);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.alert-success {
+   position: absolute;
+  top: 30px;
+  margin: auto;
+  
+  
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  background: #e8f9ee;     
+  border-left: 4px solid #28a745;
+  padding: 12px 18px;
+  border-radius: 6px;
+
+  font-family: Arial, sans-serif;
+  color: #1b7f36;
+  width: fit-content;
+
+  box-shadow: 0 2px 6px ;
+  animation: fadeIn 0.3s ease;
+}
+
+.alert-success .icon {
+  font-size: 20px;
+  font-weight: bold;
+    padding-bottom: 8px;
+}
+
+.alert-success p {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+    font-family: var(--font-main);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translate(-50%, -10px); }
+  to   { opacity: 1; transform: translate(-50%, 0); }
 }

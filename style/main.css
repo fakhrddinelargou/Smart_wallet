@@ -161,8 +161,19 @@ body{
     
 }
 
+.Wr{
+   color: var(--color-primary) !important;
+}
+.Wr svg path{
+   fill :var(--color-primary) !important;
+}
 
-
+.create{
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    font-size: 30px;
+}
 @media screen and (max-width:900px) {
     .main{
         width: 70%;
