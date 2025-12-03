@@ -1,10 +1,11 @@
 <?php
+require_once 'db.php';
 
-if (function_exists("sqlsrv_connect")) {
-    echo "SQLSRV is working!";
-} else {
-    echo "SQLSRV NOT FOUND!";
-}
+$sql = "SELECT * FROM income ";
+$stmt = $db->query($sql);
+$incomes_table = $stmt->fetchAll(PDO::FETCH_ASSOC);
+// print_r($incomes_table->fetchAll(PDO::FETCH_ASSOC));
+
 
 ?>
 <!DOCTYPE html>
@@ -83,32 +84,17 @@ if (function_exists("sqlsrv_connect")) {
     </thead>
 
     <tbody>
-      <tr>
-        <td>
-          <span class="dot blue"></span> 1
-        </td>
-        <td class="amount positive">+1500 DH</td>
-        <td>Salary Payment</td>
-        <td><span class="badge blue-b">2025-12-01</span></td>
-      </tr>
+      <?php foreach ($incomes_table as $el) {  ?>
+        <tr>
+          <td>
+            <span class="dot blue"></span> <?= $el['id'] ?>
+          </td>
+          <td class="amount positive"><?= $el['montent'] ?></td>
+          <td><?= $el['description'] ?></td>
+          <td><span class="badge blue-b"><?= $el['date'] ?></span></td>
+        </tr>
+        <?php  } ?>
 
-      <tr>
-        <td>
-          <span class="dot red"></span> 2
-        </td>
-        <td class="amount negative">-300 DH</td>
-        <td>Groceries</td>
-        <td><span class="badge red-b">2025-12-02</span></td>
-      </tr>
-
-      <tr>
-        <td>
-          <span class="dot yellow"></span> 3
-        </td>
-        <td class="amount negative">-150 DH</td>
-        <td>Internet Bill</td>
-        <td><span class="badge yellow-b">2025-12-03</span></td>
-      </tr>
     </tbody>
   </table>
 </div>
