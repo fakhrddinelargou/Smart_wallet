@@ -44,5 +44,6 @@
 
 SELECT * FROM Incomes;
 
+SELECT * FROM Incomes ORDER BY date DESC;
 
 
