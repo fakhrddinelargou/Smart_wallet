@@ -3,9 +3,53 @@
 require_once 'db.php';
 
 $sql = "SELECT * FROM expense";
-
 $stmt = $db -> query($sql);
 $expenses_table = $stmt -> fetchAll (PDO::FETCH_ASSOC);
+
+$show_form = isset($_GET["show"]) ? true : false;
+
+$montent = "";
+$description = "";
+$date = "";
+
+$errorMessage ="";
+$successMessage ="";
+if($_SERVER["REQUEST_METHOD"] == "POST"){
+  $montent = $_POST["montent"];
+  $description = $_POST["description"];
+  $date = $_POST["date"];
+do{
+
+  
+    if(empty($montent) || empty($description) || empty($date)){
+      $errorMessage = "All feilds are required";
+      break;
+    }
+    
+    $postdt = "INSERT INTO expense (montent , description , date)". "VALUES ('$montent' , '$description' , '$date')";
+    $stdt = $db->query($postdt);
+    $montent = "";
+    $description = "";
+    $date = "";
+    
+    $successMessage = "Expense added correctely";
+
+  }while(false);
+
+
+  if(isset($_GET['id'])){
+    echo $_GET['id'];
+    $delet = intval($_GET['id']);
+    $stm = $db->premare("DELETE FROM expense WHERE id = ?");
+    $stm->execute($delet);
+    header("Location : expenses.php?deleted=1");
+    exit;
+  }
+
+
+
+
+}
 
 ?>
 <!DOCTYPE html>
@@ -71,33 +115,61 @@ $expenses_table = $stmt -> fetchAll (PDO::FETCH_ASSOC);
     <section class="section_table">
 
     <div class="card">
+            <div class="create">
+<a style="text-decoration: none;" href="expenses.php?show=1">
+
+  <button class="Btn">
+    
+    <div class="sign">+</div>
+    
+    <div class="text">Create</div>
+  </button>
+</a>
+      </div>
   <h2 class="title">Expenses</h2>
 
-  <table class="table">
-    <thead>
+<table class="table">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Montant</th>
+      <th>Description</th>
+      <th>Date</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <?php foreach($expenses_table as $el) { ?>
       <tr>
-        <th>#</th>
-        <th>Montant</th>
-        <th>Description</th>
-        <th>Date</th>
+        <td><span class="dot red"></span> <?= $el["id"] ?></td>
+        <td class="amount negative"><?= $el["montent"] ?> DH</td>
+        <td><?= $el["description"] ?></td>
+        <td><span class="badge red-b"><?= $el["date"] ?></span></td>
+
+        <td class="actions-cell">
+  <div class="actions">
+    <span class="dots">⋮</span>
+
+    <div class="menu">
+      
+      <a href="expenses.php?id=<?= $el['id'] ?>" class="menu-item delete">
+        🗑️ Delete
+      </a>
+
+      <a href="expenses.php?edit=<?= $el['id'] ?>" class="menu-item edit">
+        ✏️ Edit
+      </a>
+
+    </div>
+  </div>
+</td>
+
       </tr>
-    </thead>
+    <?php } ?>
+  </tbody>
+</table>
 
-    <tbody>
-      <?php foreach($expenses_table as $el) { ?>
-        <tr>
-          <td>
-            <span class="dot red"></span> <?= $el["id"] ?>
-          </td>
-          <td class="amount negative"><?= $el["montent"] ?> DH</td>
-          <td><?= $el["description"] ?></td>
-          <td><span class="badge red-b"><?= $el["date"] ?></span></td>
-        </tr>
-        <?php } ?>
-        
-
-    </tbody>
-  </table>
 </div>
 
 
@@ -107,6 +179,87 @@ $expenses_table = $stmt -> fetchAll (PDO::FETCH_ASSOC);
 
     </section>
 </main>
+
+<!-- DELETE SUCCESS -->
+        <?php if (isset($_GET['deleted']) && $_GET['deleted'] == 1) { ?>
+    <div class="alert-success" id="successCard">
+      <span>✔ Item deleted successfully</span>
+    </div>
+<?php  } ?>
+
+<!-- OPEN FORM -->
+<?php if($show_form) { ?>
+<section class="container_form">
+
+<!-- INPUT INVALID -->
+
+<?php
+if(!empty($errorMessage)){
+
+  echo "
+  <div class='alert-error'>
+  <span class='icon'>⚠️</span>
+  <p>$errorMessage</p>
+  </div>
+  
+  ";
+  }
+?>
+<!-- INPUT VALID -->
+
+<?php
+
+if(!empty($successMessage)){
+
+  echo "
+  <div class='alert-success'>
+  <span class='icon'>✔</span>
+  <p>$successMessage</p>
+  </div>
+  
+  ";
+  }
+?>
+
+      <div class="card form-card">
+        <a style="text-decoration: none;" href="expenses.php">
+
+          <button class="close-btn" type="button">×</button>
+        </a>
+  <h2 class="title">Add Transaction</h2>
+
+  <form action="expenses.php?show=1" method="POST" class="form">
+      
+    <!-- MONTANT -->
+    <div class="form-group">
+      <label>Montant</label>
+      <input type="number" placeholder="Ex: 1500" name="montent" value="<?php echo $montent  ?>"   >
+    </div>
+
+    <!-- DESCRIPTION -->
+    <div class="form-group">
+      <label>Description</label>
+      <input type="text" placeholder="Ex: Salary or Groceries" name="description" value="<?php echo $description  ?>" >
+    </div>
+
+    <!-- DATE -->
+    <div class="form-group">
+      <label>Date</label>
+      <input type="date" name="date" value="<?php echo $date  ?>" >
+    </div>
+
+    <!-- BUTTON -->
+     
+    <button class="submit-btn" type="submit">Add</button>
+
+  </form>
+</div>
+
+</section>  
+<?php } ?>
     
+
+<script src="main.js"></script>
+
 </body>
 </html>

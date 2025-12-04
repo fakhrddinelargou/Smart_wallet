@@ -42,6 +42,19 @@ $successMessage = "Income added correctely";
 }
 
 
+if(isset($_GET['dt'])) {
+
+    $delet = intval($_GET['dt']);  
+
+    $stmt = $db->prepare("DELETE FROM income WHERE id = ?");
+    $stmt->execute([$delet]);
+    header("Location: Incomes.php?deleted=1");
+    exit;
+}
+
+
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -142,6 +155,24 @@ $successMessage = "Income added correctely";
           <td class="amount positive">$<?= $el['montent'] ?></td>
           <td><?= $el['description'] ?></td>
           <td><span class="badge blue-b"><?= $el['date'] ?></span></td>
+<td class="actions-cell">
+  <div class="actions">
+    <span class="dots">⋮</span>
+
+    <div class="menu">
+      
+      <a href="Incomes.php?dt=<?= $el['id'] ?>" class="menu-item delete">
+        🗑️ Delete
+      </a>
+
+      <a href="Incomes.php?edit=<?= $el['id'] ?>" class="menu-item edit">
+        ✏️ Edit
+      </a>
+
+    </div>
+  </div>
+</td>
+
         </tr>
         <?php  } ?>
 
@@ -156,10 +187,18 @@ $successMessage = "Income added correctely";
 
     </section>
 </main>
+<!-- DELETE SUCCESS -->
+        <?php if (isset($_GET['deleted']) && $_GET['deleted'] == 1) { ?>
+    <div class="alert-success" id="successCard">
+      <span>✔ Item deleted successfully</span>
+    </div>
+<?php  } ?>
     
+
+<!-- OPEN FORM -->
 <?php if($show_form) { ?> 
 <section class="container_form">
-
+<!-- INPUT INVALID -->
 <?php
 if(!empty($errorMessage)){
 
@@ -172,8 +211,8 @@ if(!empty($errorMessage)){
   ";
   }
 ?>
+<!-- INPUT VALID -->
 <?php
-
 if(!empty($successMessage)){
 
   echo "
@@ -185,6 +224,9 @@ if(!empty($successMessage)){
   ";
   }
 ?>
+
+
+ 
 
       <div class="card form-card">
         <a style="text-decoration: none;" href="incomes.php">
@@ -222,5 +264,9 @@ if(!empty($successMessage)){
 
 </section>
 <?php } ?>
+
+
+<script src="main.js"></script>
+
 </body>
 </html>
