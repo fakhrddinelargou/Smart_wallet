@@ -12,7 +12,18 @@ $incStmt =$db->query("SELECT SUM(montent) AS total_incomes FROM income");
 $tllinc =$incStmt->fetch(PDO::FETCH_ASSOC);
 $ttlin = $tllinc['total_incomes'] ?? 0 ;
 
+$tcb = $ttlin - $ttl;
 
+// $date = date("Y-m-d")
+$currYear = date("Y");
+$currMonth = date("m");
+$gdataI = $db->query("SELECT  SUM(montent)  AS total_month_incomes FROM income  WHERE YEAR(date)=$currYear  AND MONTH(date)=$currMonth ");
+$gdatacI = $gdataI->fetch(PDO::FETCH_ASSOC);
+$tlasmonthI = $gdatacI['total_month_incomes'] ?? 0;
+
+$gdataE =$db -> query("SELECT SUM(montent) AS total_month_expenses FROM expense WHERE YEAR(date)=$currYear AND MONTH(date)=$currMonth");
+$gdatacE = $gdataE->fetch(PDO::FETCH_ASSOC);
+$tlasmonthE = $gdatacE['total_month_expenses'] ?? 0;
 
 ?>
 
@@ -83,21 +94,31 @@ $ttlin = $tllinc['total_incomes'] ?? 0 ;
   </div>
 
   <!-- Current Balance -->
-  <div class="card balance">
-    <p class="label">Current Balance</p>
-    <h2 class="value" id="currentBalance">0 DH</h2>
-  </div>
+<div class="balance-card <?= ($tcb < 0) ? 'negative' : 'positive' ?>">
+    <h3>Current Balance</h3>
+
+    <p class="amount">
+        <?= ($tcb < 0 ? '-' : '') . abs($tcb) ?> DH
+    </p>
+
+    <?php if ($tcb < 0): ?>
+        <span class="warning">⚠️ You are spending more than you earn</span>
+    <?php else: ?>
+        <span class="success">✔ Budget is in good standing</span>
+    <?php endif; ?>
+</div>
+
 
   <!-- This Month Income -->
   <div class="card">
     <p class="label">Income This Month</p>
-    <h2 class="value" id="incomeMonth">0 DH</h2>
+    <h2 class="value" id="incomeMonth"><?= $tlasmonthI ?>  DH</h2>
   </div>
 
   <!-- This Month Expenses -->
   <div class="card red">
     <p class="label">Expenses This Month</p>
-    <h2 class="value" id="expensesMonth">0 DH</h2>
+    <h2 class="value" id="expensesMonth"><?= $tlasmonthE ?> DH</h2>
   </div>
 
 </section>

@@ -3,7 +3,7 @@
 -- GO
 
 -- -- 2 Select Database
--- USE Smart_Wallet;
+USE smart_wallet;
 -- GO
 
 -- -- 3 Create table Income
@@ -42,11 +42,12 @@ INSERT INTO Expense (montent, description, date) VALUES
 (220, N'Déplacement Professionnel – Taxi', '2025-02-17');
 -- GO
 
-SELECT * FROM Incomes;
+SELECT * FROM expense;
 
 
-CREATE TABLE Incomes
+-- CREATE TABLE Income;
 
 -- USE smart_wallet; 
 -- GO
 
+SELECT  SUM(montent)  AS total_month_incomes FROM income  WHERE YEAR(date)="dsa" AND MONTH(date);
