@@ -36,7 +36,7 @@ if (isset($_GET['edit'])) {
     $show_form = true;
 }
 
-$getCards = $db->prepare("SELECT card_holder,last_four FROM cards WHERE user_id = ?");
+$getCards = $db->prepare("SELECT card_holder,id,last_four FROM cards WHERE user_id = ?");
 $getCards->execute([$userID]);
 $cards = $getCards->fetchAll(PDO::FETCH_ASSOC);
 
@@ -49,7 +49,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
   $amount =$_POST['amount'];
 $description =$_POST['description'];
 $date =$_POST['date'];
-$last_four=$_POST["card"];
+$card_u_id=$_POST["card"];
 
 if(!empty($id)){
   
@@ -67,15 +67,15 @@ if(!empty($id)){
 
   }else{
     
-    $getCardId = $db->prepare("SELECT id FROM cards WHERE last_four = ?");
-    $getCardId->execute([$last_four]);
-    $getId = $getCardId->fetch(PDO::FETCH_ASSOC);
-    $card_id = $getId["id"];
     $stmt = $db->prepare("INSERT INTO income (amount, description, date , user_id , card_id)
                                   VALUES (?, ?, ? , ? , ?)");
-            $stmt->execute([$amount,$description,$date,$userID,$card_id]);
+            $stmt->execute([$amount,$description,$date,$userID,$card_u_id]);
             $successMessage = "Income added successfully";
           }
+
+
+   $uBalance = $db->prepare("UPDATE cards SET balance = balance + ?  WHERE id = ?");
+   $uBalance->execute([$amount , $card_u_id]);
 
 }
 
@@ -294,19 +294,22 @@ if(!empty($successMessage)){
 
   <form action="incomes.php?<?= isset($getData) ? "edit=".$getData['id'] : "show=1"  ?>" method="POST" class="form">
       <input type="hidden" name="id" value="<?= isset($getData) ? $getData['id'] : "" ?>">
+      
       <!-- choose card -->
         <div>
-          <select name="card" required>
-            <option value="">select card</option>
-            <?php foreach($cards as $card) {  ?>
-          <option value=<?= $card["last_four"] ?>>
-            <div class="cardOption">
-              <p><?= $card["card_holder"] ?></p>
-              <p>**** **** **** <?= $card["last_four"] ?></p>
-            </div>
-          </option>
-          <?php } ?>
-          </select>
+   <div class="select-wrapper">
+  <select name="card" required class="card-select">
+    <option value="">Select card</option>
+
+    <?php foreach ($cards as $card) { ?>
+      <option value="<?= $card['id'] ?>">
+        <?= $card['card_holder'] ?> •••• <?= $card['last_four'] ?>
+      </option>
+    <?php } ?>
+
+  </select>
+</div>
+
         </div>
       
     <!-- MONTANT -->

@@ -214,9 +214,45 @@ body{
     text-decoration: none;
 }
 
-.cardOption{
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+/*  */
+
+.select-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.card-select {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  background: white;
+  font-size: 14px;
+  font-weight: 500;
+  color: #111827;
+  appearance: none;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+}
+
+/* arrow */
+.select-wrapper::after {
+  content: "▾";
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6b7280;
+  pointer-events: none;
+}
+
+.card-select:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99,102,241,0.2);
+}
+
+.card-select option {
   padding: 10px;
+  width: 40%;
 }

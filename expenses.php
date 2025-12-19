@@ -34,16 +34,25 @@ if(isset($_GET['edit'])){
   $show_form = true;
 }
 
+$getCards = $db->prepare("SELECT card_holder,id,last_four FROM cards WHERE user_id = ?");
+$getCards->execute([$userID]);
+$cards = $getCards->fetchAll(PDO::FETCH_ASSOC);
+
+$getcat = $db->query("SELECT * FROM categories");
+$categories = $getcat->fetchAll(PDO::FETCH_ASSOC);
+
 if($_SERVER["REQUEST_METHOD"] == 'POST'){
   
   $id = $_POST["id"];
   $amount = $_POST["amount"];
   $description = $_POST["description"];
   $date = $_POST["date"];
+  $card_u_id=$_POST["card"];
+  $category = $_POST["category_id"];
 if(!empty($id)){
 
-  $stt = $db->prepare("UPDATE expense SET amount=? , description=? , date=? WHERE id=?");
-  $stt->execute([$amount,$description,$date,$id]);
+  $stt = $db->prepare("UPDATE expense SET amount=? , description=? , category_id=? ,  date=?   WHERE id=?");
+  $stt->execute([$amount,$description,$date,$category,$id]);
 $successMessage = "Expense updated successfully";
 
 }else{
@@ -54,12 +63,22 @@ $successMessage = "Expense updated successfully";
 
 
 
-  $stmt = $db->prepare("INSERT INTO expense (amount, description, date , user_id)
-                                  VALUES (?, ?, ? , ?)");
-            $stmt->execute([$amount,$description,$date , $userID]);
+  $stmt = $db->prepare("INSERT INTO expense (amount, description, date , user_id,card_id,category_id)
+                                  VALUES (?, ?, ? , ?,?,?)");
+            $stmt->execute([$amount,$description,$date , $userID,$card_u_id,$category]);
             $successMessage = "Income added successfully";
-          
+
+            
+   $uBalance = $db->prepare("UPDATE cards SET balance = balance - ?  WHERE id = ?");
+   $uBalance->execute([$amount , $card_u_id]);
+
+ 
+  
+ 
+
     }
+
+
 
 
 
@@ -84,6 +103,7 @@ if(isset($_GET['id'])){
   header("Location: expenses.php?deleted=1");
   exit;
 }
+
 
 
 
@@ -190,7 +210,7 @@ if(isset($_GET['id'])){
   <tbody>
     <?php foreach($expenses_table as $el) { ?>
       <tr>
-        <td><span class="dot red"></span> <?= $el["id"] ?></td>
+        <td><span class="dot"    style="background-color: <?= $colorCategory ? $colorCategory['color'] : '#5b4242ff' ?>;"></span> <?= $el["id"] ?></td>
         <td class="amount negative"><?= $el["amount"] ?> DH</td>
         <td><?= $el["description"] ?></td>
         <td><span class="badge red-b"><?= $el["date"] ?></span></td>
@@ -216,6 +236,9 @@ if(isset($_GET['id'])){
       </tr>
     <?php } ?>
   </tbody>
+  <a class="limit_btn" href="category_limit.php">
+    ADD LIMIT
+  </a>
 </table>
 
 </div>
@@ -278,6 +301,43 @@ if(!empty($successMessage)){
 
   <form action="expenses.php?<?= isset($getData) ? "edit=".$getData['id'] : "show=1" ?>" method="POST" class="form">
          <input type="hidden" name="id" value="<?= isset($getData) ? $getData['id'] : "" ?>">
+
+               <!-- choose card -->
+        <div>
+   <div class="select-wrapper">
+  <select name="card" required class="card-select">
+    <option value="">Select card</option>
+
+    <?php foreach ($cards as $card) { ?>
+      <option value="<?= $card['id'] ?>">
+        <?= $card['card_holder'] ?> •••• <?= $card['last_four'] ?>
+      </option>
+    <?php } ?>
+
+  </select>
+</div>
+
+        </div>
+
+
+
+        <!-- categories -->
+                 <div>
+   <div class="select-wrapper">
+  
+     <select name="category_id" required class="card-select">
+    <option value="">Select category</option>
+
+   <?php foreach ($categories as $cat) { ?>
+      <option value="<?= $cat['id'] ?>">
+      <?= $cat['icon'] ?> <?= $cat['name'] ?>
+    </option>
+    <?php } ?>
+
+  </select>
+</div>
+
+        </div>
     <!-- MONTANT -->
     <div class="form-group">
       <label>Montant</label>
@@ -306,6 +366,9 @@ if(!empty($successMessage)){
 </section>  
 <?php } ?>
     
+
+
+</section>
 
 <script src="main.js"></script>
 

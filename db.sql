@@ -38,7 +38,6 @@ CREATE TABLE expense (
 ALTER TABLE income
 ADD card_id INT NOT NULL;
 
-USE smart_wallet;
 
 
 ALTER TABLE registers ADD email_verified_at DATETIME NULL,
@@ -74,3 +73,66 @@ CREATE TABLE cards (
 
 
 ALTER TABLE cards ADD balance DECIMAL(10,2)  NOT NULL DEFAULT 0;
+
+
+CREATE TABLE categories (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(50) NOT NULL,
+  icon VARCHAR(50),
+  color VARCHAR(20)
+);
+
+INSERT INTO categories (name, icon, color) VALUES
+('Food', '🍔', '#f97316'),
+('Transport', '🚗', '#3b82f6'),
+('Rent', '🏠', '#8b5cf6'),
+('Shopping', '🛒', '#ec4899'),
+('Bills', '💡', '#eab308');
+
+
+ALTER TABLE expense
+ADD category_id INT NOT NULL;
+
+
+ALTER TABLE expense
+ADD CONSTRAINT fk_expense_category
+FOREIGN KEY (category_id)
+REFERENCES categories(id)
+ON DELETE RESTRICT;
+
+
+SELECT id, category_id FROM expense;
+
+CREATE TABLE category_limits (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+
+  user_id INT NOT NULL,
+  category_id INT NOT NULL,
+
+  month TINYINT NOT NULL,   
+  year SMALLINT NOT NULL,   
+
+  limit_amount DECIMAL(10,2) NOT NULL,
+
+   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+  
+  UNIQUE (user_id, category_id, month, year),
+
+
+  FOREIGN KEY (user_id) REFERENCES registers(id) ON DELETE CASCADE,
+  FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE RESTRICT
+);
+
+
+
+ALTER TABLE expense
+ADD card_id INT NOT NULL;
+
+ALTER TABLE expense
+ADD CONSTRAINT fk_expense_card
+FOREIGN KEY (card_id)
+REFERENCES cards(id)
+ON DELETE CASCADE;
+
+USE smart_wallet;
