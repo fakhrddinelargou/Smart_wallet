@@ -95,6 +95,13 @@ This version focuses on backend logic, security, and data integrity.
 
 ---
 
+## 📌 Project Management
+
+- **Trello Board:**  
+  https://trello.com/invite/b/693fd0ed498b36b342aa9d89/ATTIc513b7268f80c441204c9df194fb85b521015144/smart-wallet
+
+---
+
 ## 👨‍💻 Author
 
 **Fakhreddine Largou**  
