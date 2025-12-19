@@ -1,32 +1,63 @@
 <?php
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require 'vendor/autoload.php';
 require_once "db.php";
 
-$email = "";
-$passwordLogin = "" ;
+session_start();
 
 if($_SERVER["REQUEST_METHOD"] == "POST"){
-    $email = $_POST["email"];
-    $passwordLogin = $_POST["password"];
-    $srEmail = $db->query("SELECT * FROM registers WHERE   email = '$email' ");
-    $ftPass = $srEmail->fetch(PDO::FETCH_ASSOC);
-    if($ftPass){
-        $isExist = password_verify($passwordLogin,$ftPass['password']);
-        if($isExist){
-        session_start();
-        $_SESSION["user_id"] = $ftPass['id'];
-        $_SESSION["user_name"] = $ftPass['fullName'];
-            header("Location: Incomes.php");
-        }
+
+      $email = $_POST["email"];
+      $passwordLogin = $_POST["password"];
+      $stmt = $db->prepare("SELECT * FROM registers WHERE email = ? ");
+      $stmt->execute([$email]);
+      $user = $stmt->fetch(PDO::FETCH_ASSOC);
+      
+      if($user &&  password_verify($passwordLogin,$user['password'])){
+        
+        try{
+          
+        $otp = random_int(100000, 999999);
+        $mail = new PHPMailer(true);
+        $mail->isSMTP(); 
+        $mail->Host = 'smtp.gmail.com'; 
+        $mail->SMTPAuth = true; 
+        $mail->Username = getenv('EMAIL'); 
+        $mail->Password = getenv('APP_PASSWORD'); 
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; 
+        $mail->Port = 587;
+        $mail->setFrom(getenv('EMAIL'), 'Smart Wallet');
+        $mail->addAddress($email);
+        $mail->Subject = 'Verify your email';
+        $mail->Body = "Hello {$user['fullName']},\n\nYour verification code is: {$otp}\n\nThis code will expire in 5 minutes.\n\nSmart Wallet Team";
+        $mail->send();
+      }catch(Exception $e){
+        echo "Error: " . $e->getMessage();
+      }
+      
+          
+      
+      $_SESSION["user_id"] = $user['id'];
+      $_SESSION["user_name"] = $user['fullName'];
+      $_SESSION["email_token"] = $otp;
+      $_SESSION["email_token_expire"] = time() + 300;
+              
+      header("Location: verification_email.php");
+      exit;
+            
     }
 }
-
 
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+<link rel="icon" href="/images/icoProfile.png"> 
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
 <style>

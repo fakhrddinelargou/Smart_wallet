@@ -1,28 +1,56 @@
 <?php
 
+
+
+
 require_once "db.php";
-$fullName ="";
-$email ="";
-$pssword ="";
+$fullName = "";
+$email = "";
+$password = "";
+$message="";
 
 if($_SERVER["REQUEST_METHOD"] == "POST"){
+
 $fullName = $_POST["fullName"];
 $email = $_POST["email"];
 $password = $_POST["password"];
-$hashpass = password_hash($password , PASSWORD_DEFAULT);
 
-
-$checkEmail = $db->query("SELECT * FROM registers WHERE email = '$email' LIMIT 1");
-$ftEmail = $checkEmail->fetch(PDO::FETCH_ASSOC);
-if(!empty($fullName) && empty($ftEmail) && !empty($password) ){
-
+if (empty($fullName) || empty($email) || empty($password)) {
+  
+  $message = "Please Enter Corruct Informations";
+} else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+  $message = "Invalid Email";
+} else{
+  $checkEmail = $db->prepare("SELECT * FROM registers WHERE email = ? LIMIT 1");
+  $checkEmail->execute([$email]);
+  $ftEmail = $checkEmail->fetch(PDO::FETCH_ASSOC);
+  
+  if ($ftEmail) {
+    $message = "Email is already exist";
+  } else{
+    
+    $hashpass = password_hash($password , PASSWORD_DEFAULT);
     
     
     $reUser = $db->prepare("INSERT INTO registers (fullName , email,password) VALUES (?,?,?)");
     $reUser->execute([$fullName , $email , $hashpass]);
-    header("Location: login.php");
+    
+    $userId =$db->lastInsertId();
+    $IP_Address = $_SERVER['REMOTE_ADDR'];
+    $stmtIp = $db->prepare("INSERT INTO user_ips (user_id,ip_address) VALUES (?,?)");
+    $stmtIp->execute([$userId,$IP_Address]);
 
-}
+
+
+
+  header("Location: login.php");
+
+
+    }
+  
+  }
+   
+
 }
 
 
@@ -120,13 +148,59 @@ if(!empty($fullName) && empty($ftEmail) && !empty($password) ){
 .error{
     border-color : red !important;
 }
+
+.alert {
+  width: 100%;
+  max-width: 420px;
+  padding: 16px 18px;
+  margin: 20px auto;
+  border-radius: 12px;
+  background: #fdecea;
+  color: #611a15;
+  border-left: 5px solid #e53935;
+  font-family: Arial, sans-serif;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+.alert h4 {
+  margin: 0 0 8px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.alert p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
     </style>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/style/main.css">
+<link rel="icon" href="/images/icoProfile.png"> 
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Sign up</title>
 </head>
 <body>
+<?php if ($_SERVER["REQUEST_METHOD"] === "POST") {  ?>
+  <div class="alert">
+    <h4>Error</h4>
+    <p><?= htmlspecialchars($message) ?></p>
+  </div>
+<?php  } ?>
 
 <section class="container">
 
@@ -142,7 +216,7 @@ if(!empty($fullName) && empty($ftEmail) && !empty($password) ){
             <button type="submit" >Sign up</button>
         </form>
         <div class="form-section">
-            <p>Have an account? <a href="">Log in</a> </p>
+            <p>Have an account? <a href="login.php">Log in</a> </p>
         </div>
     </div>
     

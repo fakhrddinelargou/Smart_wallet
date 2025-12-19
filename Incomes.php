@@ -23,6 +23,7 @@ $show_form = isset($_GET['show']) ? true : false;
 $amount ="";
 $description ="";
 $date ="";
+$last_four="";
 $errorMessage = "";
 $successMessage ="";
 
@@ -35,6 +36,12 @@ if (isset($_GET['edit'])) {
     $show_form = true;
 }
 
+$getCards = $db->prepare("SELECT card_holder,last_four FROM cards WHERE user_id = ?");
+$getCards->execute([$userID]);
+$cards = $getCards->fetchAll(PDO::FETCH_ASSOC);
+
+
+
 
 if($_SERVER["REQUEST_METHOD"] == "POST"){
 
@@ -42,6 +49,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
   $amount =$_POST['amount'];
 $description =$_POST['description'];
 $date =$_POST['date'];
+$last_four=$_POST["card"];
 
 if(!empty($id)){
   
@@ -58,11 +66,14 @@ if(!empty($id)){
     $errorMessage = "All feilds are requered";
 
   }else{
-
     
-    $stmt = $db->prepare("INSERT INTO income (amount, description, date , user_id)
-                                  VALUES (?, ?, ? , ?)");
-            $stmt->execute([$amount,$description,$date,$userID]);
+    $getCardId = $db->prepare("SELECT id FROM cards WHERE last_four = ?");
+    $getCardId->execute([$last_four]);
+    $getId = $getCardId->fetch(PDO::FETCH_ASSOC);
+    $card_id = $getId["id"];
+    $stmt = $db->prepare("INSERT INTO income (amount, description, date , user_id , card_id)
+                                  VALUES (?, ?, ? , ? , ?)");
+            $stmt->execute([$amount,$description,$date,$userID,$card_id]);
             $successMessage = "Income added successfully";
           }
 
@@ -100,10 +111,11 @@ if(isset($_GET['dt'])) {
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Noto+Sans+Thaana:wght@100..900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/style/main.css"> 
+<link rel="stylesheet" href="/style/main.css">
+<link rel="icon" href="/images/icoProfile.png"> 
 <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Income & Expenses Tracker – Gestion simple des finances personnelles</title>
+    <title>Incomes</title>
 </head>
 <body>
 
@@ -119,7 +131,10 @@ if(isset($_GET['dt'])) {
         <div class="profile">
             <img src="/images/profile.jpg" alt="">
             <div class="user_name_role">
-                <p><?= $userName  ?></p>
+                    <a  href="profile.php">
+                   
+                   <p><?= $userName ?></p>
+               </a>
                 <p>Project Manager</p>
             </div>
         </div>
@@ -279,6 +294,21 @@ if(!empty($successMessage)){
 
   <form action="incomes.php?<?= isset($getData) ? "edit=".$getData['id'] : "show=1"  ?>" method="POST" class="form">
       <input type="hidden" name="id" value="<?= isset($getData) ? $getData['id'] : "" ?>">
+      <!-- choose card -->
+        <div>
+          <select name="card" required>
+            <option value="">select card</option>
+            <?php foreach($cards as $card) {  ?>
+          <option value=<?= $card["last_four"] ?>>
+            <div class="cardOption">
+              <p><?= $card["card_holder"] ?></p>
+              <p>**** **** **** <?= $card["last_four"] ?></p>
+            </div>
+          </option>
+          <?php } ?>
+          </select>
+        </div>
+      
     <!-- MONTANT -->
     <div class="form-group">
       <label>Montant</label>

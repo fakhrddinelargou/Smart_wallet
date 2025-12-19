@@ -80,12 +80,14 @@ foreach ($yearsExpense as $row) {
 <html lang="en">
 <head>
     <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="icon" href="/images/icoProfile.png"> 
+
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/style/main.css"> 
 <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Income & Expenses Tracker – Gestion simple des finances personnelles</title>
+    <title>Dashboard</title>
 </head>
 <body>
 
@@ -101,7 +103,10 @@ foreach ($yearsExpense as $row) {
         <div class="profile">
             <img src="/images/profile.jpg" alt="">
             <div class="user_name_role">
-                <p><?= $userName ?></p>
+                      <a  href="profile.php">
+                   
+                   <p><?= $userName ?></p>
+               </a>
                 <p>Project Manager</p>
             </div>
         </div>

@@ -210,3 +210,13 @@ body{
 }
 }
 
+.user_name_role a{
+    text-decoration: none;
+}
+
+.cardOption{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+}
