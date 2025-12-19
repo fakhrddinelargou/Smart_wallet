@@ -1,82 +1,101 @@
-# 🧾 Income & Expenses Tracker  
-Un projet simple et structuré pour la gestion des revenus et des dépenses, avec un backend en PHP/SQL et une interface claire pour l’utilisateur.
+# 💰 Smart Wallet – Personal Finance Management App
+
+## 📌 Project Context
+
+This project is the second version of a **personal financial management application** initially developed as a prototype for a local startup.
+
+After positive feedback on the first version, the client approved the development of a **more complete, secure, and production-ready version**, built with **PHP and MySQL**.
+
+The goal is to provide users with a secure personal space to manage their finances, including cards, expenses, income, limits, and transfers between users.
 
 ---
 
-## 👤 Auteur du Projet  
+## 🎯 Project Objectives
+
+- Provide a **secure authentication system**
+- Allow each user to manage their **own financial space**
+- Offer advanced features such as **spending limits, cards, and transfers**
+- Build a **solid backend foundation** for future scalability
+
+---
+
+## ⚙️ Technologies Used
+
+- **Backend:** PHP (PDO)
+- **Database:** MySQL
+- **Frontend:** HTML, CSS, JavaScript
+- **Authentication:** Sessions + OTP (Email)
+- **Mailing:** PHPMailer
+- **Version Control:** Git & GitHub
+
+---
+
+## 🔐 A. Authentication & Security
+
+### Features
+- User registration (Full name, Email, Password)
+- User login (Email & Password)
+- OTP verification sent by email on login
+- Secure logout
+- Email notification on login from a new IP *(Bonus)*
+- OTP required only when a new IP is detected *(Bonus)*
+
+---
+
+## 💳 B. Bank Cards Management
+
+### Features
+- Add one or multiple cards (e.g. CIH, Banque Populaire)
+- Link each income to a specific card
+- View the current balance of each card
+- Define a main card for receiving transfers
+
+---
+
+## 📊 C. Monthly Limits by Category
+
+### Features
+- Set a monthly spending limit per category
+- Automatic blocking when the limit is exceeded
+- Email notification when 80% of a limit is reached *(Bonus)*
+
+---
+
+## 🔁 D. Monthly Recurring Transactions
+
+### Features
+- Add recurring income or expenses (salary, rent, internet, etc.)
+- Automatic generation of recurring transactions on the 1st of each month
+
+---
+
+## 🔄 E. Transfers Between Users
+
+### Features
+- Send money to another user using email or unique ID
+- Receive money on the main card
+- View transfer history (sent & received)
+
+---
+
+## 📁 Project Status
+
+🟢 In development  
+This version focuses on backend logic, security, and data integrity.
+
+---
+
+## 🚀 Future Improvements
+
+- Data visualization (charts & analytics)
+- Export data (PDF / CSV)
+- Mobile-friendly interface
+- Notifications dashboard
+- Role-based permissions
+
+---
+
+## 👨‍💻 Author
+
 **Fakhreddine Largou**  
-Développeur / Passionné par le web et l’optimisation des workflows.
-
----
-
-## 📋 Planification du Projet  
-L’organisation complète du projet, les User Stories, les niveaux de difficulté et les tâches sont disponibles dans le tableau Trello ci-dessous :
-
-🔗 **Lien du tableau :**  
-https://trello.com/invite/b/692d749a78453c14ca11c6a0/ATTIed5c4bb8a1cfe8345e86a9d0bb5b2e988E6DB740/income-expenses-tracker-gestion-simple-des-finances-personnelles
-
----
-
-## 🎯 Objectif du Projet  
-Développer une application simple permettant :  
-- D’ajouter, modifier et supprimer des revenus et des dépenses  
-- D’afficher les listes sous forme de tableaux  
-- De faire des calculs simples (totaux, solde, statistiques)  
-- De gérer les données via une base SQL bien structurée  
-
----
-
-## 🏗️ Architecture Technique  
-
-### 🔹 Base de données  
-- Création de la base  
-- Tables : *incomes*, *expenses*  
-- Clés primaires, types SQL, contraintes, validations  
-- Centralisation des requêtes dans `Database.sql`
-
-### 🔹 Backend  
-- Requêtes INSERT / UPDATE / DELETE  
-- Validation des données  
-- Gestion des erreurs  
-- Sécurisation basique
-
-### 🔹 Frontend  
-- Formulaires d’ajout et de modification  
-- Tableaux d’affichage  
-- Interface simple et claire  
-- Expérience utilisateur fluide
-
----
-
-## 🧩 User Stories (Exemples)
-
-### 👤 Côté Utilisateur  
-- En tant qu’utilisateur, je veux afficher la liste des revenus dans un tableau.  
-- En tant qu’utilisateur, je veux modifier une dépense via un formulaire.  
-- En tant qu’utilisateur, je veux ajouter un revenu facilement via un formulaire.  
-
-### 👨‍💻 Côté Développeur  
-- En tant que développeur, je veux créer la table *Incomes* pour stocker les revenus.  
-- En tant que développeur, je veux valider les données avant insertion.  
-- En tant que développeur, je veux regrouper toutes les requêtes SQL dans `Database.sql`.
-
----
-
-## 🏷️ Labels de Difficulté  
-| Couleur | Niveau | Description |
-|---------|--------|-------------|
-| 🟢 Vert | Facile | Tâches frontend simples |
-| 🟡 Jaune | Moyen | CRUD + SQL simples |
-| 🔴 Rouge | Difficile | Architecture SQL + backend complexe |
-
----
-
-## 🚀 Avancement  
-Le suivi complet du projet est visible dans le tableau Trello ci-dessus.
-
----
-
-## 👥 Collaboration  
-Ce projet est ouvert aux retours, suggestions et améliorations.  
-Merci pour vos feedbacks, ils sont très importants pour améliorer la qualité du travail.
-
+Frontend & Backend Web Developer  
